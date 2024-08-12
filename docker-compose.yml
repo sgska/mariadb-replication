@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  master1:
+    image: mariadb:10.6
+    container_name: mariadb-master1
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: testdb
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./master1/data:/var/lib/mysql
+      - ./master1/conf.d:/etc/mysql/conf.d
+    networks:
+      mariadb_net:
+        ipv4_address: 172.28.0.2
+
+  master2:
+    image: mariadb:10.6
+    container_name: mariadb-master2
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: testdb
+    ports:
+      - "3308:3306"
+    volumes:
+      - ./master2/data:/var/lib/mysql
+      - ./master2/conf.d:/etc/mysql/conf.d
+    networks:
+      mariadb_net:
+        ipv4_address: 172.28.0.3
+
+networks:
+  mariadb_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
